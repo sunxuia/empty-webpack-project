@@ -1,0 +1,11 @@
+{
+  "name": "empty-webpack-project",
+  "version": "1.0.0",
+  "description": "A empty webpack project with develop and production settings.",
+  "main": "src/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
