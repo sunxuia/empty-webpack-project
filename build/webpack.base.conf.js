@@ -1,5 +1,6 @@
 'use strict'
 const { resolvePath, ...utils } = require('./utils')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
     context: resolvePath('/'),
@@ -8,7 +9,7 @@ module.exports = {
         foo: resolvePath('/src/main.js')
     },
     resolve: {
-        extensions: ['.js', '.json'],
+        extensions: ['.js', '.json', '.css'],
         alias: {
             '@': resolvePath('/src')
         }
@@ -48,5 +49,12 @@ module.exports = {
                 dir: 'fonts'
             })
         ]
-    }
+    },
+    plugins: [
+        new CopyWebpackPlugin([{
+            from: resolvePath('/static'),
+            to: resolvePath('/dist/static'),
+            ignore: ['.*']
+        }])
+    ]
 }

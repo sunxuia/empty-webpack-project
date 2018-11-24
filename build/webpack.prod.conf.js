@@ -7,6 +7,8 @@ const CleanWebpackPlugin = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin")
+const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
+const notifier = require('node-notifier')
 
 const useSourceMap = true
 
@@ -19,6 +21,7 @@ module.exports = merge(baseWebpackConfig, {
         publicPath: './'
     },
     optimization: {
+        // runtimeChunk: true,
         splitChunks: {
             cacheGroups: {
                 commons: {
@@ -63,15 +66,22 @@ module.exports = merge(baseWebpackConfig, {
     plugins: [
         // // global variable
         new webpack.DefinePlugin({
-            'process.env': 'production'
+            'process.env.NODE_ENV': 'production'
         }),
         // clean dist
-        new CleanWebpackPlugin('dist/*', {
+        new CleanWebpackPlugin(['dist/css/', 'dist/js/'], {
             root: resolvePath('/')
         }),
         // create index.html
         new HtmlWebpackPlugin({
-            template: resolvePath('/index.html')
+            template: resolvePath('/index.html'),
+            favicon: resolvePath('logo.png'),
+            minify: {
+                removeComments: true,
+                collapseWhitespace: true,
+                removeAttributeQuotes: true,
+                chunksSortMode: 'dependency'
+            }
         }),
         // extract css to a single file (chunk name)
         new MiniCssExtractPlugin({
@@ -81,6 +91,20 @@ module.exports = merge(baseWebpackConfig, {
         // optimize and compress css
         new OptimizeCssAssetsPlugin({
             preset: ['default', { discardComments: { removeAll: true } }]
+        }),
+        new FriendlyErrorsPlugin({
+            onErrors: function (severity, errors) {
+                if (severity === 'error') {
+                    const error = errors[0];
+                    const filename = error.file.split('!').pop();
+                    notifier.notify({
+                        title: 'webpack build error',
+                        message: severity + ': ' + error.name,
+                        subtitle: filename || '',
+                        icon: resolvePath('logo.png')
+                    })
+                }
+            }
         })
     ]
 })

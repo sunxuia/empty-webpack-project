@@ -42,7 +42,7 @@ exports.styleLoader = function ({ test, loader, extract, ...options }) {
             modules: true,
             camelCase: 'dashes',
             localIdentName: '[name]-[local]__[hash:4]',
-            importLoaders: 2,
+            importLoaders: loader ? 2 : 1,
             limit: 1000
         }),
         generateLoader('postcss-loader')
