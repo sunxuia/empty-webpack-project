@@ -66,7 +66,9 @@ module.exports = merge(baseWebpackConfig, {
     plugins: [
         // // global variable
         new webpack.DefinePlugin({
-            'process.env.NODE_ENV': 'production'
+            'process.env': {
+                NODE_ENV: JSON.stringify('production')
+            }
         }),
         // clean dist
         new CleanWebpackPlugin(['dist/css/', 'dist/js/'], {
