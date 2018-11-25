@@ -71,7 +71,7 @@ module.exports = merge(baseWebpackConfig, {
             }
         }),
         // clean dist
-        new CleanWebpackPlugin(['dist/css/', 'dist/js/'], {
+        new CleanWebpackPlugin(['dist/*'], {
             root: resolvePath('/')
         }),
         // create index.html
