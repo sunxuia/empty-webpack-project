@@ -92,6 +92,7 @@ module.exports = merge(baseWebpackConfig, {
         new OptimizeCssAssetsPlugin({
             preset: ['default', { discardComments: { removeAll: true } }]
         }),
+        // notify on errors
         new FriendlyErrorsPlugin({
             onErrors: function (severity, errors) {
                 if (severity === 'error') {
