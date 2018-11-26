@@ -1,6 +1,7 @@
 'use strict'
 const { resolvePath, ...utils } = require('./utils')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const StylelintWebpackPlugin = require('stylelint-webpack-plugin')
 
 module.exports = {
     context: resolvePath('/'),
@@ -51,6 +52,9 @@ module.exports = {
         ]
     },
     plugins: [
+        new StylelintWebpackPlugin({
+            files: ['**/*.{htm,html,css,scss,sass}'],
+        }),
         new CopyWebpackPlugin([{
             from: resolvePath('/static'),
             to: resolvePath('/dist/static'),
