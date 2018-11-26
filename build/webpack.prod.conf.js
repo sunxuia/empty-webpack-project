@@ -99,7 +99,7 @@ module.exports = merge(baseWebpackConfig, {
             onErrors: function (severity, errors) {
                 if (severity === 'error') {
                     const error = errors[0];
-                    const filename = error.file.split('!').pop();
+                    const filename = error.file;
                     notifier.notify({
                         title: 'webpack build error',
                         message: severity + ': ' + error.name,

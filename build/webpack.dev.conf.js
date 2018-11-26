@@ -78,7 +78,7 @@ module.exports = new Promise((resolve, reject) => {
                     onErrors: function (severity, errors) {
                         if (severity === 'error') {
                             const error = errors[0];
-                            const filename = error.file.split('!').pop();
+                            const filename = error.file;
                             notifier.notify({
                                 title: 'webpack build error',
                                 message: severity + ': ' + error.name,
