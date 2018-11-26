@@ -66,6 +66,7 @@ module.exports = new Promise((resolve, reject) => {
             reject(err)
         } else {
             process.env.PORT = port
+            config.devServer.port = port
             config.plugins.push(
                 // notify on errors
                 new FriendlyErrorsPlugin({
