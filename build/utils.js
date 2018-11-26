@@ -11,13 +11,13 @@ exports.resolvePath = function (dir) {
 /**
  * generate loader for assets
  */
-exports.assetsLoader = function ({ test, dir, ...options }) {
+exports.assetsLoader = function ({ test, outputPath, ...options }) {
     return {
         test,
         loader: 'url-loader',
         options: Object.assign({
             limit: 1000,
-            name: path.join(dir, '[name].[hash:7].[ext]'),
+            name: '[name].[hash:7].[ext]',
             fallback: 'file-loader'
         }, options)
     }

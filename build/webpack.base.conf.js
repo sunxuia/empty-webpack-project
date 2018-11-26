@@ -36,17 +36,17 @@ module.exports = {
             // image file loader
             utils.assetsLoader({
                 test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-                dir: 'img'
+                outputPath: 'img'
             }),
             // video and sound file loader
             utils.assetsLoader({
                 test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
-                dir: 'media'
+                outputPath: 'media'
             }),
             // font file loader
             utils.assetsLoader({
                 test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-                dir: 'fonts'
+                outputPath: 'fonts'
             })
         ]
     },
