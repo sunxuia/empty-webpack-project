@@ -1,7 +1,7 @@
 {
     "name": "empty-webpack-project",
     "version": "1.0.0",
-    "description": "A empty webpack project with develop and production settings.",
+    "description": "An empty webpack project with develop and production settings.",
     "main": "src/main.js",
     "scripts": {
         "prettier-format": "npx prettier src/**/*.{vue,js,css,sass,scss,html,htm} --write --loglevel=warn & npm run fix-format",
