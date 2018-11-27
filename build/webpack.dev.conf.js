@@ -30,7 +30,7 @@ const config = merge(baseWebpackConfig, {
             utils.styleLoader({
                 test: /\.(scss)$/,
                 loader: 'sass-loader',
-                sourceMap: true,
+                sourceMap: true
             }),
             // sass
             utils.styleLoader({
@@ -38,7 +38,7 @@ const config = merge(baseWebpackConfig, {
                 loader: 'sass-loader',
                 sourceMap: true,
                 indentedSyntax: true
-            }),
+            })
         ]
     },
     plugins: [
@@ -60,7 +60,7 @@ const config = merge(baseWebpackConfig, {
 
 module.exports = new Promise((resolve, reject) => {
     portfinder.getPort({
-        port: process.env.PORT || 8080,
+        port: process.env.PORT || 8080
     }, (err, port) => {
         if (err) {
             reject(err)
@@ -77,8 +77,8 @@ module.exports = new Promise((resolve, reject) => {
                     },
                     onErrors: function (severity, errors) {
                         if (severity === 'error') {
-                            const error = errors[0];
-                            const filename = error.file;
+                            const error = errors[0]
+                            const filename = error.file
                             notifier.notify({
                                 title: 'webpack build error',
                                 message: severity + ': ' + error.name,

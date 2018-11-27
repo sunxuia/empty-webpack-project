@@ -1,5 +1,5 @@
 const path = require('path')
-const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 /**
  * resolve path to root
@@ -27,7 +27,7 @@ exports.assetsLoader = function ({ test, outputPath, ...options }) {
  * generate style loader
  */
 exports.styleLoader = function ({ test, loader, extract, ...options }) {
-    function generateLoader(loader, loaderOptions) {
+    function generateLoader (loader, loaderOptions) {
         return {
             loader,
             options: Object.assign({}, loaderOptions, {

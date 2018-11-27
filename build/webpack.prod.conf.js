@@ -5,8 +5,8 @@ const webpack = require('webpack')
 const merge = require('webpack-merge')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const MiniCssExtractPlugin = require("mini-css-extract-plugin")
-const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin")
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const notifier = require('node-notifier')
 
@@ -60,7 +60,7 @@ module.exports = merge(baseWebpackConfig, {
                 sourceMap: useSourceMap,
                 indentedSyntax: true,
                 extract: true
-            }),
+            })
         ]
     },
     plugins: [
@@ -87,8 +87,8 @@ module.exports = merge(baseWebpackConfig, {
         }),
         // extract css to a single file (chunk name)
         new MiniCssExtractPlugin({
-            filename: "css/[name].css",
-            chunkFilename: "css/[name].css"
+            filename: 'css/[name].css',
+            chunkFilename: 'css/[name].css'
         }),
         // optimize and compress css
         new OptimizeCssAssetsPlugin({
@@ -98,8 +98,8 @@ module.exports = merge(baseWebpackConfig, {
         new FriendlyErrorsPlugin({
             onErrors: function (severity, errors) {
                 if (severity === 'error') {
-                    const error = errors[0];
-                    const filename = error.file;
+                    const error = errors[0]
+                    const filename = error.file
                     notifier.notify({
                         title: 'webpack build error',
                         message: severity + ': ' + error.name,

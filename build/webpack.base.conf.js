@@ -53,7 +53,7 @@ module.exports = {
     },
     plugins: [
         new StylelintWebpackPlugin({
-            files: ['**/*.{htm,html,css,scss,sass}'],
+            files: ['**/*.{htm,html,css,scss,sass}']
         }),
         new CopyWebpackPlugin([{
             from: resolvePath('/static'),
