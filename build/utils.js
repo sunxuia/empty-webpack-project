@@ -1,5 +1,6 @@
 const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const notifier = require('node-notifier')
 
 /**
  * resolve path to root
@@ -73,5 +74,21 @@ exports.styleLoader = function ({ test, loader, extract, ...options }) {
                 use: generateStyleLoaders()
             }
         ]
+    }
+}
+
+/**
+ * show a message on desktop when error
+ */
+exports.notifyOnError = function (severity, errors) {
+    if (severity === 'error') {
+        const error = errors[0]
+        const filename = error.file
+        notifier.notify({
+            title: 'webpack build error',
+            message: severity + ': ' + error.name,
+            subtitle: filename || '',
+            icon: exports.resolvePath('logo.png')
+        })
     }
 }

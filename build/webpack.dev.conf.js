@@ -6,7 +6,6 @@ const merge = require('webpack-merge')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const portfinder = require('portfinder')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
-const notifier = require('node-notifier')
 
 const config = merge(baseWebpackConfig, {
     mode: 'development',
@@ -75,18 +74,7 @@ module.exports = new Promise((resolve, reject) => {
                             `Your application is running here: http://${config.devServer.host}:${config.devServer.port}`
                         ]
                     },
-                    onErrors: function (severity, errors) {
-                        if (severity === 'error') {
-                            const error = errors[0]
-                            const filename = error.file
-                            notifier.notify({
-                                title: 'webpack build error',
-                                message: severity + ': ' + error.name,
-                                subtitle: filename || '',
-                                icon: resolvePath('logo.png')
-                            })
-                        }
-                    }
+                    onErrors: utils.notifyOnError
                 }))
             resolve(config)
         }

@@ -8,7 +8,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
-const notifier = require('node-notifier')
 
 const useSourceMap = true
 
@@ -96,18 +95,7 @@ module.exports = merge(baseWebpackConfig, {
         }),
         // notify on errors
         new FriendlyErrorsPlugin({
-            onErrors: function (severity, errors) {
-                if (severity === 'error') {
-                    const error = errors[0]
-                    const filename = error.file
-                    notifier.notify({
-                        title: 'webpack build error',
-                        message: severity + ': ' + error.name,
-                        subtitle: filename || '',
-                        icon: resolvePath('logo.png')
-                    })
-                }
-            }
+            onErrors: utils.notifyOnError
         })
     ]
 })
