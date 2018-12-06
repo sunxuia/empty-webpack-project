@@ -39,26 +39,10 @@ module.exports = merge(baseWebpackConfig, {
     devtool: useSourceMap ? 'source-map' : 'none',
     module: {
         rules: [
-            // css
-            utils.styleLoader({
-                test: /\.(css)$/,
+            // style loaders
+            ...utils.styleLoaders({
                 sourceMap: useSourceMap,
-                extract: true
-            }),
-            // scss
-            utils.styleLoader({
-                test: /\.(scss)$/,
-                loader: 'sass-loader',
-                sourceMap: useSourceMap,
-                extract: true
-            }),
-            // sass
-            utils.styleLoader({
-                test: /\.(sass)$/,
-                loader: 'sass-loader',
-                sourceMap: useSourceMap,
-                indentedSyntax: true,
-                extract: true
+                lastLoader: MiniCssExtractPlugin.loader
             })
         ]
     },

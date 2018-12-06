@@ -1,5 +1,4 @@
 const path = require('path')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const notifier = require('node-notifier')
 
 /**
@@ -12,69 +11,90 @@ exports.resolvePath = function (dir) {
 /**
  * generate loader for assets
  */
-exports.assetsLoader = function ({ test, outputPath, ...options }) {
+exports.assetsLoader = function ({
+    test,
+    outputPath,
+    ...options
+}) {
     return {
         test,
         loader: 'url-loader',
-        options: Object.assign(
-            {
-                limit: 1000,
-                name: '[name].[hash:7].[ext]',
-                fallback: 'file-loader'
-            },
-            options
+        options: Object.assign({
+            limit: 1000,
+            name: '[name].[hash:7].[ext]',
+            fallback: 'file-loader'
+        },
+        options
         )
     }
 }
 
 /**
- * generate style loader
+ * generate style loaders
  */
-exports.styleLoader = function ({ test, loader, extract, ...options }) {
+exports.styleLoaders = function ({
+    sourceMap = true,
+    lastLoader = 'style-loader'
+}) {
+    if (typeof (lastLoader) === 'string') {
+        lastLoader = generateLoader(lastLoader)
+    }
+
     function generateLoader (loader, loaderOptions) {
         return {
             loader,
             options: Object.assign({}, loaderOptions, {
-                sourceMap: options.sourceMap
+                sourceMap
             })
         }
     }
 
-    function generateStyleLoaders (cssLoaderOptions) {
-        const res = [
-            extract ? MiniCssExtractPlugin.loader : generateLoader('style-loader'),
-            generateLoader(
-                'css-loader',
-                Object.assign(
-                    {
-                        importLoaders: loader ? 2 : 1,
-                        limit: 1000
-                    },
-                    cssLoaderOptions
-                )
-            )
-        ]
-        if (loader) {
-            res.push(generateLoader(loader, options))
+    function generateLoaders (isModule, loader, options) {
+        const loaders = []
+        if (lastLoader) {
+            loaders.push(lastLoader)
         }
-        return res
+        loaders.push(generateLoader(
+            'css-loader',
+            Object.assign({
+                importLoaders: loader ? 2 : 1,
+                limit: 1000
+            }, isModule ? {
+                modules: true,
+                camelCase: 'dashes',
+                localIdentName: '[name]-[local]__[hash:4]'
+            } : null)
+        ))
+        loaders.push(generateLoader('postcss-loader'))
+        if (loader) {
+            loaders.push(generateLoader(loader, options))
+        }
+        return loaders
     }
-    return {
-        test,
-        oneOf: [
-            {
-                resourceQuery: /module/,
-                use: generateStyleLoaders({
-                    modules: true,
-                    camelCase: 'dashes',
-                    localIdentName: '[name]-[local]__[hash:4]'
-                })
-            },
-            {
-                use: generateStyleLoaders()
-            }
-        ]
+
+    function generateStyleLoader (test, loader, options) {
+        return {
+            test,
+            oneOf: [
+                {
+                    resourceQuery: /module/,
+                    use: generateLoaders(true, loader, options)
+                },
+                {
+                    use: generateLoaders(false, loader, options)
+                }
+            ]
+        }
     }
+
+    return [
+        generateStyleLoader(/\.css$/),
+        generateStyleLoader(/\.scss$/, 'sass-loader'),
+        generateStyleLoader(/\.sass$/, 'sass-loader', { indentedSyntax: true }),
+        generateStyleLoader(/\.less$/, 'less-loader'),
+        generateStyleLoader(/\.stylus$/, 'stylus-loader'),
+        generateStyleLoader(/\.styl$/, 'stylus-loader')
+    ]
 }
 
 /**

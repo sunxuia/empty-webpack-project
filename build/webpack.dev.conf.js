@@ -20,24 +20,8 @@ const config = merge(baseWebpackConfig, {
     },
     module: {
         rules: [
-            // css
-            utils.styleLoader({
-                test: /\.(css)$/,
-                sourceMap: true
-            }),
-            // scss
-            utils.styleLoader({
-                test: /\.(scss)$/,
-                loader: 'sass-loader',
-                sourceMap: true
-            }),
-            // sass
-            utils.styleLoader({
-                test: /\.(sass)$/,
-                loader: 'sass-loader',
-                sourceMap: true,
-                indentedSyntax: true
-            })
+            // style loaders
+            ...utils.styleLoaders({})
         ]
     },
     plugins: [
