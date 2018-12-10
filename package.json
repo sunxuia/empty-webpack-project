@@ -4,10 +4,11 @@
   "description": "An empty webpack project with develop and production settings.",
   "main": "src/main.js",
   "scripts": {
-    "prettier-format": "npx prettier src/**/*.{vue,js,css,sass,scss,html,htm} --write --loglevel=warn & npm run fix-format",
-    "fix-format": "npx eslint src/ --ext .js,.vue,.html,.htm --fix & npx stylelint src/**/*.{vue,css,scss,sass} --fix",
-    "build": "npx webpack --config build/webpack.prod.conf.js",
-    "dev": "npx webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "prettier-format": "prettier %v% --write --loglevel=warn && npm run fix-format",
+    "fix-format": "eslint %v% --fix && stylelint  %v% --fix",
+    "fix-format-all": "eslint src/ --ext .js,.vue,.html,.htm --fix && stylelint src/**/*.{vue,css,scss,sass} --fix",
+    "build": "cross-env NODE_ENV=production webpack --config build/webpack.prod.conf.js",
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "test": "cross-env BABEL_ENV=test jest"
   },
   "browserslist": [
