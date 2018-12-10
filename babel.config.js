@@ -9,5 +9,14 @@ module.exports = {
     ],
     plugins: [
         '@babel/transform-runtime'
-    ]
+    ],
+    env: {
+        test: {
+            presets: [
+                ['@babel/preset-env', {
+                    modules: 'commonjs'
+                }]
+            ]
+        }
+    }
 }

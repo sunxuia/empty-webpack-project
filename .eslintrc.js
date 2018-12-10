@@ -4,8 +4,8 @@ module.exports = {
     env: {
         browser: true,
     },
-    extends: ['standard'],
-    plugins: ['babel'],
+    extends: ['standard', 'plugin:jest/recommended'],
+    plugins: ['babel', 'jest'],
     rules: {
         // allow async-await
         'generator-star-spacing': 'off',
