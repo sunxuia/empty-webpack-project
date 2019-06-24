@@ -4,6 +4,7 @@ module.exports = {
             // needed for webpack optimization
             modules: 'commonjs',
             useBuiltIns: 'usage',
+            corejs: 2,
             debug: process.env.NODE_ENV === 'development'
         }]
     ],

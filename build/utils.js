@@ -54,17 +54,14 @@ exports.styleLoaders = function ({
         if (lastLoader) {
             loaders.push(lastLoader)
         }
-        loaders.push(generateLoader(
-            'css-loader',
-            Object.assign({
-                importLoaders: loader ? 2 : 1,
-                limit: 1000
-            }, isModule ? {
-                modules: true,
-                camelCase: 'dashes',
+        loaders.push(generateLoader('css-loader', {
+            importLoaders: loader ? 2 : 1,
+            localsConvention: 'dashes',
+            modules: isModule ? {
+                mode: 'local',
                 localIdentName: '[name]-[local]__[hash:4]'
-            } : null)
-        ))
+            } : false
+        }))
         loaders.push(generateLoader('postcss-loader'))
         if (loader) {
             loaders.push(generateLoader(loader, options))

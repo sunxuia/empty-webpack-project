@@ -3,7 +3,7 @@ const { resolvePath, ...utils } = require('./utils')
 const baseWebpackConfig = require('./webpack.base.conf')
 const webpack = require('webpack')
 const merge = require('webpack-merge')
-const CleanWebpackPlugin = require('clean-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
@@ -54,9 +54,7 @@ module.exports = merge(baseWebpackConfig, {
             }
         }),
         // clean dist
-        new CleanWebpackPlugin(['dist/*'], {
-            root: resolvePath('/')
-        }),
+        new CleanWebpackPlugin(),
         // create index.html
         new HtmlWebpackPlugin({
             template: resolvePath('/index.html'),
