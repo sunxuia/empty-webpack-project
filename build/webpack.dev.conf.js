@@ -20,6 +20,19 @@ const config = merge(baseWebpackConfig, {
     },
     module: {
         rules: [
+            // eslint
+            {
+                test: /\.(js)$/,
+                loader: 'eslint-loader',
+                enforce: 'pre',
+                include: [resolvePath('src')],
+                options: {
+                    formatter: require('eslint-friendly-formatter'),
+                    fix: true,
+                    emitWarning: true,
+                    failOnError: false
+                }
+            },
             // style loaders
             ...utils.styleLoaders({})
         ]

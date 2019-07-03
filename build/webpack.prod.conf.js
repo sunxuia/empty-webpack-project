@@ -39,6 +39,17 @@ module.exports = merge(baseWebpackConfig, {
     devtool: useSourceMap ? 'source-map' : 'none',
     module: {
         rules: [
+            {
+                test: /\.(js)$/,
+                loader: 'eslint-loader',
+                enforce: 'pre',
+                include: [resolvePath('src')],
+                options: {
+                    formatter: require('eslint-friendly-formatter'),
+                    emitError: true,
+                    failOnError: true
+                }
+            },
             // style loaders
             ...utils.styleLoaders({
                 sourceMap: useSourceMap,
