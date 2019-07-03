@@ -6,6 +6,7 @@ const merge = require('webpack-merge')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const portfinder = require('portfinder')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
+const StylelintWebpackPlugin = require('stylelint-webpack-plugin')
 
 const config = merge(baseWebpackConfig, {
     mode: 'development',
@@ -43,6 +44,11 @@ const config = merge(baseWebpackConfig, {
             'process.env': {
                 NODE_ENV: JSON.stringify('development')
             }
+        }),
+        new StylelintWebpackPlugin({
+            files: ['**/*.{htm,html,css,scss,sass}'],
+            emitErrors: false,
+            failOnError: false
         }),
         // create index.html
         new HtmlWebpackPlugin({

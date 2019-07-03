@@ -8,6 +8,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
+const StylelintWebpackPlugin = require('stylelint-webpack-plugin')
 
 const useSourceMap = true
 
@@ -63,6 +64,11 @@ module.exports = merge(baseWebpackConfig, {
             'process.env': {
                 NODE_ENV: JSON.stringify('production')
             }
+        }),
+        new StylelintWebpackPlugin({
+            files: ['**/*.{htm,html,css,scss,sass}'],
+            emitErrors: true,
+            failOnError: true
         }),
         // clean dist
         new CleanWebpackPlugin(),
