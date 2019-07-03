@@ -5,8 +5,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 module.exports = {
     context: resolvePath('/'),
     entry: {
-        app: resolvePath('/src/main.js'),
-        foo: resolvePath('/src/main.js')
+        app: resolvePath('/src/main.js')
     },
     resolve: {
         extensions: ['.js', '.json', '.css'],
