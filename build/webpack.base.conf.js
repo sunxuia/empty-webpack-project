@@ -1,6 +1,6 @@
 'use strict'
 const { resolvePath, ...utils } = require('./utils')
-const variables = require('./variables')
+const variables = require('../variables')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
