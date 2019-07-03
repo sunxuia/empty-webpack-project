@@ -1,11 +1,15 @@
 'use strict'
 const { resolvePath, ...utils } = require('./utils')
+const variables = require('./variables')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
     context: resolvePath('/'),
     entry: {
         app: resolvePath('/src/main.js')
+    },
+    output: {
+        publicPath: variables.PUBLIC_PATH
     },
     resolve: {
         extensions: ['.js', '.json', '.css'],

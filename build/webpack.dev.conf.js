@@ -1,5 +1,6 @@
 'use strict'
 const { resolvePath, ...utils } = require('./utils')
+const variables = require('./variables')
 const baseWebpackConfig = require('./webpack.base.conf')
 const webpack = require('webpack')
 const merge = require('webpack-merge')
@@ -13,10 +14,13 @@ const config = merge(baseWebpackConfig, {
     devtool: 'eval-source-map',
     // webpack-dev-server
     devServer: {
+        publicPath: variables.PUBLIC_PATH,
         port: process.env.PORT,
         host: 'localhost',
         clientLogLevel: 'warning',
-        historyApiFallback: true,
+        historyApiFallback: {
+            index: variables.PUBLIC_PATH
+        },
         hot: true
     },
     module: {
