@@ -1,6 +1,6 @@
 'use strict'
 const { resolvePath, ...utils } = require('./utils')
-const variables = require('../variables')
+const variables = require('./variables')
 const baseWebpackConfig = require('./webpack.base.conf')
 const webpack = require('webpack')
 const merge = require('webpack-merge')

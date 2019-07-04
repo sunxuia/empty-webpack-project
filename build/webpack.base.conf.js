@@ -1,7 +1,8 @@
 'use strict'
 const { resolvePath, ...utils } = require('./utils')
-const variables = require('../variables')
+const variables = require('./variables')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const webpack = require('webpack')
 
 module.exports = {
     context: resolvePath('/'),
@@ -43,6 +44,12 @@ module.exports = {
         ]
     },
     plugins: [
+        // global variable
+        new webpack.DefinePlugin({
+            'process.env': {
+                VARIABLES: JSON.stringify(variables)
+            }
+        }),
         new CopyWebpackPlugin([{
             from: resolvePath('/static'),
             to: resolvePath('/dist/static'),
