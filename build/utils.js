@@ -23,48 +23,42 @@ exports.assetsLoader = function ({
             limit: 1000,
             name: '[name].[hash:7].[ext]',
             fallback: 'file-loader'
-        },
-        options
-        )
+        }, options)
     }
 }
 
 /**
  * generate style loaders
  */
-exports.styleLoaders = function ({
-    sourceMap = true,
-    lastLoader = 'style-loader'
-}) {
-    if (typeof (lastLoader) === 'string') {
-        lastLoader = generateLoader(lastLoader)
-    }
-
-    function generateLoader (loader, loaderOptions) {
-        return {
-            loader,
-            options: Object.assign({}, loaderOptions, {
-                sourceMap
-            })
-        }
-    }
-
-    function generateLoaders (isModule, loader, options) {
+exports.styleLoaders = function ({ sourceMap, lastLoader }) {
+    function generateLoaders (isModule, loader, options = {}) {
         const loaders = []
         if (lastLoader) {
             loaders.push(lastLoader)
         }
-        loaders.push(generateLoader('css-loader', {
-            importLoaders: loader ? 2 : 1,
-            localsConvention: 'dashes',
-            modules: isModule ? {
-                mode: 'local',
-                localIdentName: '[name]-[local]__[hash:4]'
-            } : false
-        }))
-        loaders.push(generateLoader('postcss-loader'))
+        loaders.push({
+            loader: 'css-loader',
+            options: {
+                importLoaders: loader ? 2 : 1,
+                localsConvention: 'dashes',
+                modules: isModule ? {
+                    mode: 'local',
+                    localIdentName: '[name]-[local]__[hash:4]'
+                } : false,
+                sourceMap
+            }
+        })
+        loaders.push({
+            loader: 'postcss-loader',
+            options: {
+                sourceMap
+            }
+        })
         if (loader) {
-            loaders.push(generateLoader(loader, options))
+            loaders.push({
+                loader: loader,
+                options
+            })
         }
         return loaders
     }
@@ -85,12 +79,12 @@ exports.styleLoaders = function ({
     }
 
     return [
-        generateStyleLoader(/\.css$/),
+        generateStyleLoader(/\.css$/, null, { sourceMap }),
         generateStyleLoader(/\.scss$/, 'sass-loader'),
-        generateStyleLoader(/\.sass$/, 'sass-loader', { indentedSyntax: true }),
-        generateStyleLoader(/\.less$/, 'less-loader'),
-        generateStyleLoader(/\.stylus$/, 'stylus-loader'),
-        generateStyleLoader(/\.styl$/, 'stylus-loader')
+        generateStyleLoader(/\.sass$/, 'sass-loader', { sassOptions: { indentedSyntax: true } }),
+        generateStyleLoader(/\.less$/, 'less-loader', { sourceMap }),
+        generateStyleLoader(/\.stylus$/, 'stylus-loader', { sourceMap }),
+        generateStyleLoader(/\.styl$/, 'stylus-loader', { sourceMap })
     ]
 }
 

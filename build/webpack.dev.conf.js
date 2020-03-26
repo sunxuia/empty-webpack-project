@@ -39,7 +39,12 @@ const config = merge(baseWebpackConfig, {
                 }
             },
             // style loaders
-            ...utils.styleLoaders({})
+            ...utils.styleLoaders({
+                sourceMap: true,
+                lastLoader: {
+                    loader: 'style-loader'
+                }
+            })
         ]
     },
     plugins: [
