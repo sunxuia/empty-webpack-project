@@ -1,6 +1,7 @@
 'use strict'
 const { resolvePath, ...utils } = require('./utils')
 const baseWebpackConfig = require('./webpack.base.conf')
+const config = require('./config')
 const webpack = require('webpack')
 const merge = require('webpack-merge')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
@@ -10,9 +11,60 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const StylelintWebpackPlugin = require('stylelint-webpack-plugin')
 
-const useSourceMap = true
+/**
+ * plugins config
+ */
+const plugins = []
+// global variable
+plugins.push(new webpack.DefinePlugin({
+    'process.env': {
+        NODE_ENV: JSON.stringify('production')
+    }
+}))
+// stylelint
+plugins.push(new StylelintWebpackPlugin({
+    files: ['**/*.{htm,html,css,scss,sass}'],
+    emitErrors: true,
+    failOnError: true
+}))
+// clean dist
+plugins.push(new CleanWebpackPlugin())
+// multipage (page entrance)
+for (const pageName in config.pages) {
+    const page = config.pages[pageName]
+    plugins.push(
+        new HtmlWebpackPlugin({
+            filename: page.fileName,
+            template: resolvePath(page.template),
+            chunks: ['vendors', 'commons', page.chunkName],
+            favicon: resolvePath(page.favicon),
+            title: page.title,
+            minify: {
+                removeComments: true,
+                collapseWhitespace: true,
+                removeAttributeQuotes: true,
+                chunksSortMode: 'dependency'
+            }
+        }))
+}
+// extract css to a single file (chunk name)
+plugins.push(new MiniCssExtractPlugin({
+    filename: 'css/[id].[contenthash].css',
+    chunkFilename: 'css/[id].[contenthash].css'
+}))
+// optimize and compress css
+plugins.push(new OptimizeCssAssetsPlugin({
+    preset: ['default', { discardComments: { removeAll: true } }]
+}))
+// notify on errors
+plugins.push(new FriendlyErrorsPlugin({
+    onErrors: utils.notifyOnError
+}))
 
-module.exports = merge(baseWebpackConfig, {
+/**
+ * prod webpack config
+ */
+const prodConfig = {
     mode: 'production',
     output: {
         path: resolvePath('/dist'),
@@ -36,7 +88,7 @@ module.exports = merge(baseWebpackConfig, {
             }
         }
     },
-    devtool: useSourceMap ? 'source-map' : 'none',
+    devtool: config.prod.useSourceMap ? 'source-map' : 'none',
     module: {
         rules: [
             {
@@ -52,48 +104,12 @@ module.exports = merge(baseWebpackConfig, {
             },
             // style loaders
             ...utils.styleLoaders({
-                sourceMap: useSourceMap,
+                sourceMap: config.prod.useSourceMap,
                 lastLoader: MiniCssExtractPlugin.loader
             })
         ]
     },
-    plugins: [
-        // global variable
-        new webpack.DefinePlugin({
-            'process.env': {
-                NODE_ENV: JSON.stringify('production')
-            }
-        }),
-        new StylelintWebpackPlugin({
-            files: ['**/*.{htm,html,css,scss,sass}'],
-            emitErrors: true,
-            failOnError: true
-        }),
-        // clean dist
-        new CleanWebpackPlugin(),
-        // create index.html
-        new HtmlWebpackPlugin({
-            template: resolvePath('/index.html'),
-            favicon: resolvePath('logo.png'),
-            minify: {
-                removeComments: true,
-                collapseWhitespace: true,
-                removeAttributeQuotes: true,
-                chunksSortMode: 'dependency'
-            }
-        }),
-        // extract css to a single file (chunk name)
-        new MiniCssExtractPlugin({
-            filename: 'css/[name].css',
-            chunkFilename: 'css/[name].css'
-        }),
-        // optimize and compress css
-        new OptimizeCssAssetsPlugin({
-            preset: ['default', { discardComments: { removeAll: true } }]
-        }),
-        // notify on errors
-        new FriendlyErrorsPlugin({
-            onErrors: utils.notifyOnError
-        })
-    ]
-})
+    plugins
+}
+
+module.exports = merge(baseWebpackConfig, prodConfig)

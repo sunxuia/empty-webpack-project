@@ -1,1 +1,1 @@
-process.env.VARIABLES = require('../build/variables')
+process.env.VARIABLES = require('../build/config').variables

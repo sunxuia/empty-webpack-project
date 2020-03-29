@@ -1,16 +1,14 @@
 'use strict'
 const { resolvePath, ...utils } = require('./utils')
-const variables = require('./variables')
+const config = require('./config')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const webpack = require('webpack')
 
-module.exports = {
+const baseConfig = {
     context: resolvePath('/'),
-    entry: {
-        app: resolvePath('/src/main.js')
-    },
+    entry: {},
     output: {
-        publicPath: variables.PUBLIC_PATH
+        publicPath: config.publicPath
     },
     resolve: {
         extensions: ['.js', '.json', '.css'],
@@ -47,9 +45,11 @@ module.exports = {
         // global variable
         new webpack.DefinePlugin({
             'process.env': {
-                VARIABLES: JSON.stringify(variables)
+                PUBLIC_PATH: JSON.stringify(config.publicPath),
+                VARIABLES: JSON.stringify(config.variables)
             }
         }),
+        // static files
         new CopyWebpackPlugin([{
             from: resolvePath('/static'),
             to: resolvePath('/dist/static'),
@@ -57,3 +57,10 @@ module.exports = {
         }])
     ]
 }
+// multipage
+for (const pageName in config.pages) {
+    const page = config.pages[pageName]
+    baseConfig.entry[page.chunkName] = resolvePath(page.entry)
+}
+
+module.exports = baseConfig
