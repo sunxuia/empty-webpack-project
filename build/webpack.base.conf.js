@@ -50,11 +50,15 @@ const baseConfig = {
             }
         }),
         // static files
-        new CopyWebpackPlugin([{
-            from: resolvePath('/static'),
-            to: resolvePath('/dist/static'),
-            ignore: ['.*']
-        }])
+        new CopyWebpackPlugin({
+            patterns: [{
+                from: resolvePath('/static'),
+                to: resolvePath('/dist/static'),
+                globOptions: {
+                    ignore: ['.*']
+                }
+            }]
+        })
     ]
 }
 // multipage
